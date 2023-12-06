@@ -185,8 +185,16 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
+nav a,
+nav a:visited {
+	text-decoration: none;
+	color: black
+}
+
+nav a:hover,
 li:hover {
 	color: #B1663C;
 }

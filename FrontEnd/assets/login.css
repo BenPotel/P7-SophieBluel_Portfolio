@@ -1,0 +1,36 @@
+li a {
+    font-weight: 600;
+}
+
+.login_title {
+    text-align: center;
+    margin-top: 120px;
+}
+
+.login_form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 300px;
+    margin-top: 40px;
+}
+
+.connexion {
+    display: flex;
+    flex-direction: column;
+}
+
+.connexion label {
+    font-family: "Work Sans";
+    font-weight: 500;
+    color: #3d3d3d;
+
+}
+
+.connexion input {
+    width: 400px;
+    height: 50px;
+    margin-top: 8px;
+    margin-bottom: 30px;
+    border: none;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
