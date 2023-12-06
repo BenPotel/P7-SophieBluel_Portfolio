@@ -34,3 +34,18 @@ li a {
     border: none;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
+
+.connexion .submit {
+    width: 180px;
+    height: 35px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    cursor: pointer;
+}
+
+.forgotten_password {
+    font-family: "Work Sans";
+    font-weight: 500;
+    color: #3d3d3d;
+    text-align: center;
+}
