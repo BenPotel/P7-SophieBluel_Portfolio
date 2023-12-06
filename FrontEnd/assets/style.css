@@ -158,7 +158,7 @@ h1 {
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
 }
 
 h1>span {
@@ -179,6 +179,7 @@ nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
+	gap: 20px;
 
 }
 
@@ -188,6 +189,11 @@ nav li {
 	cursor: pointer;
 }
 
+nav a {
+	font-weight: 600;
+}
+
+a,
 nav a,
 nav a:visited {
 	text-decoration: none;
