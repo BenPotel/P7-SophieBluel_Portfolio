@@ -189,10 +189,6 @@ nav li {
 	cursor: pointer;
 }
 
-nav a {
-	font-weight: 600;
-}
-
 a,
 nav a,
 nav a:visited {

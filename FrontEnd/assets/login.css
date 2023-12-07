@@ -49,3 +49,8 @@
     color: #3d3d3d;
     text-align: center;
 }
+
+.error {
+    color: red;
+    padding-bottom: 15px;
+}
