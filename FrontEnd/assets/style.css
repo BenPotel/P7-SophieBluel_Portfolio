@@ -279,7 +279,7 @@ li:hover {
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-	margin: 50px;
+	margin: 50px 0px;
 }
 
 .gallery img {
@@ -339,4 +339,12 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
+}
+
+/********Display none when disconnected**********/
+
+.header_edit,
+.edition,
+.navlogout {
+	display: none;
 }
