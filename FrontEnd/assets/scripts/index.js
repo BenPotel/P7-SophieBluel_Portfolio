@@ -8,7 +8,7 @@ const portfolio = document.getElementById("portfolio");
 
 // Adding the filter div to the Html//
 const FilterSection = document.createElement("div");
-FilterSection.classList.add("filtres");
+FilterSection.classList.add("filters");
 portfolio.appendChild(FilterSection);
 
 //Creating the "tous" (all) button//
@@ -105,13 +105,14 @@ function displayGallery(works) {
 //           Logged in Display           //
 //.......................................//
 
-function activateStylesheet() {
+function CheckingToken() {
   const token = localStorage.getItem("token");
   const stylesheetLink = document.getElementById("defaultStylesheet");
 
   if (token) {
     // If token is present, activate the "edit" stylesheet
     stylesheetLink.href = "./assets/edit.css";
+    Editmode();
   } else {
     // If token is not present, use the default stylesheet
     stylesheetLink.href = "./assets/style.css";
@@ -119,10 +120,56 @@ function activateStylesheet() {
 }
 
 // Call the function when the page loads
-window.onload = activateStylesheet;
+window.onload = CheckingToken;
+
+function Editmode() {
+  const headerElement = document.querySelector("body");
+
+  // Show the black EdidMode header
+  const editHeaderElement = document.createElement("div");
+  editHeaderElement.className = "header_edit";
+  editHeaderElement.innerHTML =
+    '<img src="./assets/icons/modifW.svg" alt=""><p>Mode édition</p>';
+  headerElement.insertBefore(editHeaderElement, headerElement.firstChild);
+
+  // Transform the login nav link to a logout link
+  const logoutLinkElement = headerElement.querySelector(".login_out");
+  logoutLinkElement.href = "#";
+  logoutLinkElement.innerText = "logout";
+  logoutLinkElement.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent default `<a href="#">` behaviour
+    // Do logout and reload the page
+    disconnected();
+  });
+
+  //create the modify button to add/delete projects from the gallery (modale)//
+  const projects = document.getElementById("projects");
+  const editbutton = document.createElement("div");
+  editbutton.className = "edit_btn";
+  editbutton.innerHTML =
+    '<img src="./assets/icons/modifB.svg" alt=""><p>modifier</p>';
+  projects.appendChild(editbutton);
+}
+/*   // Allow edit Works
+  const worksActionElement = document.querySelector(".actions");
+  const editWorksElement = document.createElement("a");
+  editWorksElement.href = "#";
+  editWorksElement.className = "edit-works";
+  editWorksElement.innerHTML =
+    '<i class="fa-regular fa-pen-to-square"></i> <span>modifier</span>'; // TODO: Use i18n here
+  editWorksElement.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent default `<a href="#">` behaviour
+    showEditWorksModal();
+  });
+  worksActionElement.append(editWorksElement);
+
+  // Remove definitively the categories filters
+  const filtersElement = document.querySelector(".filters");
+  filtersElement.remove();
+}   */
 
 function userDisconnected() {
-  const logout = document.querySelector(".navlogout");
+  const logout = document.getElementById("Contact");
   logout.addEventListener("click", (event) => {
     event.preventDefault();
     disconnected();
