@@ -104,13 +104,13 @@ function displayGallery(works) {
 //.......................................//
 //           Logged in Display           //
 //.......................................//
-
-function CheckingToken() {
+let modal = null;
+function TokenCheck() {
   const token = localStorage.getItem("token");
   const stylesheetLink = document.getElementById("defaultStylesheet");
 
   if (token) {
-    // If token is present, activate the "edit" stylesheet
+    // If token is present, activate the "edition mode" stylesheet
     stylesheetLink.href = "./assets/edit.css";
     Editmode();
   } else {
@@ -120,7 +120,7 @@ function CheckingToken() {
 }
 
 // Call the function when the page loads
-window.onload = CheckingToken;
+window.onload = TokenCheck;
 
 function Editmode() {
   const headerElement = document.querySelector("body");
@@ -138,49 +138,25 @@ function Editmode() {
   logoutLinkElement.innerText = "logout";
   logoutLinkElement.addEventListener("click", (event) => {
     event.preventDefault(); // Prevent default `<a href="#">` behaviour
-    // Do logout and reload the page
     disconnected();
   });
 
-  //create the modify button to add/delete projects from the gallery (modale)//
+  //create the modify button to add/delete projects from the gallery (modal)//
   const projects = document.getElementById("projects");
   const editbutton = document.createElement("div");
-  editbutton.className = "edit_btn";
+  editbutton.className = "edit_btn js-modal";
   editbutton.innerHTML =
     '<img src="./assets/icons/modifB.svg" alt=""><p>modifier</p>';
   projects.appendChild(editbutton);
-}
-/*   // Allow edit Works
-  const worksActionElement = document.querySelector(".actions");
-  const editWorksElement = document.createElement("a");
-  editWorksElement.href = "#";
-  editWorksElement.className = "edit-works";
-  editWorksElement.innerHTML =
-    '<i class="fa-regular fa-pen-to-square"></i> <span>modifier</span>'; // TODO: Use i18n here
-  editWorksElement.addEventListener("click", (event) => {
-    event.preventDefault(); // Prevent default `<a href="#">` behaviour
-    showEditWorksModal();
-  });
-  worksActionElement.append(editWorksElement);
-
-  // Remove definitively the categories filters
-  const filtersElement = document.querySelector(".filters");
-  filtersElement.remove();
-}   */
-
-function userDisconnected() {
-  const logout = document.getElementById("Contact");
-  logout.addEventListener("click", (event) => {
-    event.preventDefault();
-    disconnected();
+  const dialog = document.getElementById("modal");
+  editbutton.addEventListener("click", function () {
+    dialog.showModal();
   });
 }
 
 function disconnected() {
-  // suppression des data dans le localStorage
+  // deleting date in the local storage
   localStorage.clear();
-  // rechargement de la page
+  // reloading page
   location.reload();
 }
-
-userDisconnected();
