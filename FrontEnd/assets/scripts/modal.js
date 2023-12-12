@@ -34,8 +34,15 @@ myDialog.addEventListener("Keydown", (event) => {
     myDialog.close();
   }
 });
+
 const close_modal_btn = document.querySelector(".close_btn");
 close_modal_btn.addEventListener("click", () => myDialog.close());
 
-const myDiv = document.querySelector(".modal_container");
-myDiv.addEventListener("click", (event) => event.stopPropagation());
+const modalDiv = document.querySelector(".modal_container");
+modalDiv.addEventListener("click", (event) => event.stopPropagation());
+/* modalDiv.addEventListener("mousedown", (event) => {
+  // Check if the left mouse button (button code 0) is clicked
+  if (event.button === 0) {
+    event.stopPropagation();
+  }
+}); */

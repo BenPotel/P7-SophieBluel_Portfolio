@@ -4,30 +4,32 @@ import { fetchCategories, fetchWorks } from "./api.js";
 //              Filter Section                  //
 //..............................................//
 
-const portfolio = document.getElementById("portfolio");
+function FiltersCreation() {
+  const portfolio = document.getElementById("portfolio");
+  // Adding the filter div to the Html//
+  const FilterSection = document.createElement("div");
+  FilterSection.classList.add("filters");
+  portfolio.appendChild(FilterSection);
 
-// Adding the filter div to the Html//
-const FilterSection = document.createElement("div");
-FilterSection.classList.add("filters");
-portfolio.appendChild(FilterSection);
+  //Creating the "tous" (all) button//
+  const buttonAll = document.createElement("button");
+  buttonAll.textContent = "Tous";
+  buttonAll.classList.add("btnFilter");
+  FilterSection.appendChild(buttonAll);
 
-//Creating the "tous" (all) button//
-const buttonAll = document.createElement("button");
-buttonAll.textContent = "Tous";
-buttonAll.classList.add("btnFilter");
-FilterSection.appendChild(buttonAll);
-
-//Making this button, the default filter ,adding the appropriate CSS class, event listener and making the filter functional//
-let DefaultFilter = document.querySelector(".btnFilter");
-DefaultFilter.classList.add("active");
-buttonAll.addEventListener("click", () => {
-  const GalleryContainer = document.querySelector(".gallery");
-  GalleryContainer.innerHTML = "";
-  fetchWorks().then((works) => {
-    displayGallery(works);
+  //Making this button, the default filter ,adding the appropriate CSS class, event listener and making the filter functional//
+  let DefaultFilter = document.querySelector(".btnFilter");
+  DefaultFilter.classList.add("active");
+  buttonAll.addEventListener("click", () => {
+    const GalleryContainer = document.querySelector(".gallery");
+    GalleryContainer.innerHTML = "";
+    fetchWorks().then((works) => {
+      displayGallery(works);
+    });
+    setActiveFilter(buttonAll);
   });
-  setActiveFilter(buttonAll);
-});
+}
+FiltersCreation();
 
 fetchCategories()
   .then((categories) => {
@@ -37,6 +39,7 @@ fetchCategories()
 
 function displayFilters(categories) {
   categories.forEach((category) => {
+    const FilterSection = document.querySelector(".filters");
     const FilterName = document.createElement("button");
     FilterName.classList.add("btnFilter");
     FilterName.innerHTML = category.name;
@@ -88,6 +91,7 @@ portfolio.appendChild(GalleryContainer);
 // Creating the gallery from the retrieved data, dynamically adding the different elements //
 function displayGallery(works) {
   works.forEach((work) => {
+    const GalleryContainer = document.querySelector(".gallery");
     const workElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
@@ -100,7 +104,6 @@ function displayGallery(works) {
     workElement.appendChild(titleElement);
   });
 }
-
 //.......................................//
 //           Logged in Display           //
 //.......................................//
