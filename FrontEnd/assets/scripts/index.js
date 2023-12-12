@@ -104,7 +104,7 @@ function displayGallery(works) {
 //.......................................//
 //           Logged in Display           //
 //.......................................//
-let modal = null;
+
 function TokenCheck() {
   const token = localStorage.getItem("token");
   const stylesheetLink = document.getElementById("defaultStylesheet");
