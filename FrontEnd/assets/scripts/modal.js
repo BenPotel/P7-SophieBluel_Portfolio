@@ -29,11 +29,6 @@ createModal();
 //Making sure the modal closes when the user click outside or press the escape key
 const myDialog = document.getElementById("modal");
 myDialog.addEventListener("click", () => myDialog.close());
-myDialog.addEventListener("Keydown", (event) => {
-  if (event.key === "Escape" || event.key === "Esc") {
-    myDialog.close();
-  }
-});
 
 const close_modal_btn = document.querySelector(".close_btn");
 close_modal_btn.addEventListener("click", () => myDialog.close());
@@ -43,6 +38,6 @@ modalDiv.addEventListener("click", (event) => event.stopPropagation());
 /* modalDiv.addEventListener("mousedown", (event) => {
   // Check if the left mouse button (button code 0) is clicked
   if (event.button === 0) {
-    event.stopPropagation();
+    event.preventDefault();
   }
 }); */

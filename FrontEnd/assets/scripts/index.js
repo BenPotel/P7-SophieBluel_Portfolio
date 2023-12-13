@@ -144,7 +144,7 @@ function Editmode() {
     disconnected();
   });
 
-  //create the modify button to add/delete projects from the gallery (modal)//
+  //create the modify button to open the gallery modal//
   const projects = document.getElementById("projects");
   const editbutton = document.createElement("div");
   editbutton.className = "edit_btn js-modal";
@@ -158,8 +158,8 @@ function Editmode() {
 }
 
 function disconnected() {
-  // deleting date in the local storage
+  // deleting data in the local storage
   localStorage.clear();
-  // reloading page
+  // reload the page
   location.reload();
 }
