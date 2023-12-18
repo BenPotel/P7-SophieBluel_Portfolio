@@ -13,9 +13,11 @@ dialog::backdrop {
     opacity: 0.4;
 }
 
+
 .modal_container {
     width: 100%;
     height: 100%;
+
 }
 
 #modal h3,
@@ -50,17 +52,6 @@ dialog::backdrop {
     left: 20px;
     top: 15px;
     font-size: 17px;
-}
-
-.modal_btn {
-    display: flex;
-    justify-content: center;
-}
-
-.submit_btn:disabled {
-    border: 1px solid #999999;
-    background-color: #a7a7a7;
-    color: #fff;
 }
 
 hr {
@@ -148,4 +139,64 @@ hr {
     margin: auto;
     height: 170px;
     width: auto;
+}
+
+.submit_btn {
+    display: flex;
+    text-align: center;
+    margin: auto;
+    background-color: #1D6154;
+    color: #fff;
+    border-radius: 60px;
+    height: 36px;
+    min-width: 240px;
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.submit_btn:disabled {
+    border: 1px solid #999999;
+    background-color: #a7a7a7;
+    color: #fff;
+}
+
+#btnDeletePhoto {
+    color: red;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+
+.modal_gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    margin: 30px 40px 60px 75px;
+}
+
+.gallery-item {
+    position: relative;
+    width: 60px;
+    height: 80px;
+    margin: 10px 5px;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    background-color: black;
 }

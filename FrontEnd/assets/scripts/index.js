@@ -74,21 +74,19 @@ function FilterWorks(categoryId) {
 //          Gallery Section           //
 //....................................//
 
-fetchWorks()
-  .then((works) => {
-    displayGallery(works);
-  })
-  .catch((error) => console.error("Erreur lors de la requête:", error));
-
 // Adding the Gallery element to later modify the Html//
 let GalleryContainer = document.createElement("div");
 GalleryContainer.classList.add("gallery");
 portfolio.appendChild(GalleryContainer);
 
+const works = await fetchWorks();
+displayGallery(works);
+
 // Creating the gallery from the retrieved data, dynamically adding the different elements //
 function displayGallery(works) {
+  const GalleryContainer = document.querySelector(".gallery");
+  GalleryContainer.innerHTML = "";
   works.forEach((work) => {
-    const GalleryContainer = document.querySelector(".gallery");
     const workElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
@@ -102,6 +100,12 @@ function displayGallery(works) {
   });
 }
 
+function refreshWorks() {
+  fetchWorks().then((data) => {
+    const UpdadedWorks = data;
+    displayGallery(UpdadedWorks);
+  });
+}
 //.........................................//
 //               Modals                    //
 //.........................................//
@@ -119,7 +123,7 @@ function ModalAdd() {
 		</div>
     <h3>Ajout photo</h3>
     <form class="form_upload_img">
-      <label id="zoneAjoutPhoto">
+      <label>
 			<i class="fa-regular fa-image"></i>
 			<input type="file" name="image" id="ajoutPhoto">
 			<button id="btnChoixFichier"> +Ajouter une image</button>
@@ -133,10 +137,8 @@ function ModalAdd() {
       <label for="categories">Catégories</label>
         <select name="categories" id="categories">
         </select>
-    <hr>
-    <div class="modal_btn">
+    <hr> 
 			<input type="submit" class="submit_btn" disabled value="Valider" >
-		</div>
     </form>
   </div>
 `;
@@ -169,16 +171,14 @@ function createModal() {
   // Set the inner HTML content
   modal.innerHTML = `
     <div class="modal_container">
-        <form action="#" method="dialog" id="modal_gallery">
+        <form action="#" method="dialog" >
             <div class="close_div">
                 <button class="close_btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <h3>Galerie photo</h3>
-            <div class="modalGallery"></div>
+            <div class="modal_gallery"></div>
             <hr>
-            <div class="modal_btn">
-                <input type="submit" id="add_Photo_Btn" value="Ajouter une photo">
-            </div>
+                <input type="submit" class="add_Photo_Btn submit_btn" value="Ajouter une photo">
         </form>
     </div>
     `;
@@ -190,6 +190,7 @@ function createModal() {
 createModal();
 switchModal();
 closeModal();
+displayModalGallery(works);
 
 function closeModal() {
   //Making sure the modal closes when the user click outside
@@ -214,7 +215,7 @@ function closeModal() {
 
 function switchModal() {
   //Making the AddPhotoBtn show the second Modal
-  const AddPhoto = document.getElementById("add_Photo_Btn");
+  const AddPhoto = document.querySelector(".add_Photo_Btn");
   const modalAdd = document.getElementById("modalAdd");
   AddPhoto.addEventListener("click", function () {
     modalAdd.showModal();
@@ -228,15 +229,125 @@ function switchModal() {
     modal1.showModal();
   });
 }
+function displayModalGallery(works) {
+  const galleryModal = document.querySelector(".modal_gallery");
+  if (galleryModal !== null) {
+    galleryModal.innerHTML = works
+      .map(
+        (img) =>
+          `<div class="gallery-item">
+          <img src=${img.imageUrl} alt=${img.title} data-id=${img.id}>
+          <i class="fa-solid fa-trash-can delete-icon" data-id=${img.id}></i>
+        </div> `
+      )
+      .join("");
+
+    let DeleteIcons = document.querySelectorAll(".delete-icon");
+    for (let DeleteIcon of DeleteIcons) {
+      DeleteIcon.addEventListener("click", deleteWork);
+    }
+  }
+}
+
+//function called when the trash icon is clicked in the modal, allowing to delete works
+
+async function deleteWork(e) {
+  let id = this.dataset.id;
+
+  await fetch(`http://localhost:5678/api/works/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "*/*",
+      Authorization: "Bearer " + localStorage.user,
+    },
+  }).then((res) => {
+    if (res.ok) {
+      e.target.parentElement.remove();
+      refreshWorks();
+    } else {
+      if (response.status === 401) {
+        console.error("Unauthorized. Check the validity of your token.");
+      } else {
+        console.error(
+          `Failed to delete work with ID ${id}. Status: ${response.status}`
+        );
+      }
+    }
+  });
+}
+
+/* async function displayModalGallery(works) {
+  const galleryContainer = document.querySelector(".modal_gallery");
+  // Clear existing gallery content
+  galleryContainer.innerHTML = "";
+
+  // Fetch gallery data from the API
+  const galleryData = await fetchWorks();
+
+  // Populate the gallery modal with fetched data
+  galleryData.forEach((item) => {
+    const galleryItem = document.createElement("div");
+    galleryItem.classList.add("gallery-item");
+
+    const deleteIcon = document.createElement("span");
+    deleteIcon.classList.add("delete-icon");
+    deleteIcon.innerHTML = '<i class="fas fa-trash-alt"></i>';
+    deleteIcon.addEventListener("click", () => deleteWork(item.id));
+
+    const image = document.createElement("img");
+    image.src = item.imageUrl;
+    image.alt = item.title;
+
+    galleryItem.appendChild(deleteIcon);
+    galleryItem.appendChild(image);
+
+    galleryContainer.appendChild(galleryItem);
+  });
+}
+
+async function deleteWork(workId) {
+  {
+    const token = window.localStorage.getItem("token");
+    try {
+      // Make a DELETE request to the API
+      const response = await fetch(
+        `http://localhost:5678/api/works/${workId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.ok) {
+        console.log(`Work with ID ${workId} deleted successfully.`);
+        const galleryItem = document.querySelector(
+          `[data-work-id="${workId}"]`
+        );
+        if (galleryItem) {
+          galleryItem.remove();
+        }
+      } else {
+        console.error(`Failed to delete work with ID ${workId}.`);
+      }
+    } catch (error) {
+      console.error("Error deleting work:", error);
+    }
+  }
+} */
+
+/*  let iconsDelete = document.querySelectorAll(".icon_delete");
+    for (let iconDelete of iconsDelete) {
+      iconDelete.addEventListener("click", deleteProject);
+    }
+  } */
 
 //.......................................//
 //           Logged in Display           //
 //.......................................//
 
 function TokenCheck() {
-  const token = localStorage.getItem("token");
   const stylesheetLink = document.getElementById("defaultStylesheet");
-
+  const token = localStorage.getItem("token");
   if (token) {
     // If token is present, activate the "edition mode" stylesheet
     stylesheetLink.href = "./assets/edit.css";
