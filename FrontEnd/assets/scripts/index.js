@@ -104,6 +104,7 @@ function refreshWorks() {
   fetchWorks().then((data) => {
     const UpdadedWorks = data;
     displayGallery(UpdadedWorks);
+    displayModalGallery(UpdadedWorks);
   });
 }
 //.........................................//
@@ -137,7 +138,7 @@ function ModalAdd() {
         <select name="categories" id="categories">
         </select>
     <hr> 
-			<input type="submit" class="submit_btn" disabled value="Valider" >
+			<input type="submit" class="form_submit_btn" disabled value="Valider" >
     </form>
   </div>
 `;
@@ -313,10 +314,7 @@ function previewImage(event) {
       `Ce type de document n'est pas accepté. Veuillez selectionner une image JPEG, PNG ou JPG.`
     );
     resetForm(input);
-    labelSection.querySelectorAll("img, span, p").forEach((element) => {
-      element.style.display = "block";
-      preview.style.display = "none";
-    });
+
     return;
   }
 
@@ -328,7 +326,7 @@ function previewImage(event) {
     return;
   }
 
-  // Toggle the visibility of other elements in the label section
+  // Toggle the visibility of other elements in the label section if the previous criterias are met
   labelSection.querySelectorAll("img, span, p").forEach((element) => {
     element.style.display = "none";
   });
@@ -343,7 +341,7 @@ function previewImage(event) {
 
   reader.readAsDataURL(file);
 }
-// Function to reset the form
+// Function to reset the form (if incorrect format/size or after succesfully adding a project)
 function resetForm(element) {
   const form = element.closest("form.upload_img_form");
   if (form) {
@@ -364,6 +362,66 @@ function resetForm(element) {
     console.error("Form is null or undefined");
   }
 }
+
+function checkForm() {
+  const titleInput = document.getElementById("title");
+  const categoryInput = document.getElementById("categories");
+  const fileInput = document.getElementById("add_Photo");
+  const SubmitBtn = document.querySelector(".form_submit_btn");
+  const formSubmit = document.querySelector(".upload_img_form");
+  function formSubmitBtn() {
+    if (
+      titleInput.value !== "" &&
+      categoryInput.value !== "default" &&
+      fileInput.files.length > 0
+    ) {
+      SubmitBtn.style.background = "#1D6154";
+      SubmitBtn.disabled = false;
+    } else {
+      SubmitBtn.disabled = true;
+      SubmitBtn.style.background = "#A7A7A7";
+    }
+  }
+
+  if (titleInput !== null) {
+    titleInput.addEventListener("input", formSubmitBtn);
+    categoryInput.addEventListener("input", formSubmitBtn);
+    fileInput.addEventListener("input", formSubmitBtn);
+    formSubmit.addEventListener("submit", addProject);
+  }
+}
+
+checkForm();
+
+async function addProject(event) {
+  event.preventDefault();
+  const titleInput = document.getElementById("title");
+  const categoryInput = document.getElementById("categories");
+  const fileInput = document.getElementById("add_Photo");
+
+  const formData = new FormData();
+  formData.append("image", fileInput.files[0]);
+  formData.append("title", titleInput.value);
+  formData.append("category", categoryInput.value);
+
+  await fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.user,
+    },
+    body: formData,
+  }).then((response) => {
+    if (response.ok) {
+      alert("Votre projet a bien été ajouté à la galerie.");
+      refreshWorks();
+      resetForm(document.getElementById("add_Photo"));
+    } else if (response.status == "401") {
+      alert("La requête a rencontré une erreur, veuillez vous reconnecter");
+      document.location.href = "login.html";
+    }
+  });
+}
+
 //.......................................//
 //           Logged in Display           //
 //.......................................//
