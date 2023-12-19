@@ -13,6 +13,9 @@ dialog::backdrop {
     opacity: 0.4;
 }
 
+form {
+    padding-bottom: 10px;
+}
 
 .modal_container {
     width: 100%;
@@ -44,106 +47,16 @@ dialog::backdrop {
     outline: none;
 }
 
-.back_arrow {
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-    position: absolute;
-    left: 20px;
-    top: 15px;
-    font-size: 17px;
-}
-
 hr {
     color: #B3B3B3;
     opacity: 0.5;
     width: 80%;
 }
 
-/* .Gallery_edit_Modal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
-
-.form_upload_img {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.form_upload_img label {
-    margin-left: 32px;
-}
-
-.form_upload_img #title,
-#categories {
-    display: flex;
-    margin: auto;
-    font-family: "Work Sans";
-    color: #3d3d3d;
-    font-weight: 500;
-    width: 420px;
-    height: 50px;
-    margin-top: 7px;
-    margin-bottom: 30px;
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09)
-}
-
-.form_add_photo {
-    width: 420px;
-    height: 170px;
-    border-radius: 3px;
-    background: #E8F1F7;
-    margin: auto;
-    margin-bottom: 30px;
-    padding: 30px 0 20px;
-    cursor: pointer;
-}
-
-.form_add_photo img {
-    display: block;
-    margin: auto;
-}
-
-.form_add_photo .format_picture {
-    display: flex;
-    justify-content: center;
-    font-size: 10px;
-    margin-top: 7px;
-}
-
-.form_add_photo .button_add_picture {
-    margin: auto;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px #CBD6DC solid;
-    background: #CBD6DC;
-    color: #306685;
-    border-radius: 50px;
-    width: 175px;
-    height: 36px;
-    font-family: "Syne", sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.form_add_photo .img_uploaded {
-    display: block;
-    margin: auto;
-    height: 170px;
-    width: auto;
-}
-
 .submit_btn {
     display: flex;
     text-align: center;
+    justify-content: center;
     margin: auto;
     background-color: #1D6154;
     color: #fff;
@@ -161,15 +74,6 @@ hr {
     color: #fff;
 }
 
-#btnDeletePhoto {
-    color: red;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
-
-
 .modal_gallery {
     display: flex;
     flex-wrap: wrap;
@@ -177,7 +81,7 @@ hr {
     margin: 30px 40px 60px 75px;
 }
 
-.gallery-item {
+.gallery_item {
     position: relative;
     width: 60px;
     height: 80px;
@@ -185,18 +89,126 @@ hr {
     overflow: hidden;
 }
 
-.gallery-item img {
+.gallery_item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.delete-icon {
+.black_square {
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+}
+
+.delete_icon {
     position: absolute;
     top: 5px;
     right: 5px;
     cursor: pointer;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     background-color: black;
+}
+
+.back_arrow {
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+    top: 15px;
+    font-size: 17px;
+}
+
+.upload_img_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.upload_img_form label {
+    margin-left: 45px;
+}
+
+.photo_file_section {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #e8F1F6;
+    align-items: center;
+    width: 82%;
+    height: 180px;
+    border-radius: 3px;
+    gap: 8px;
+    cursor: pointer;
+
+}
+
+.photo_file_section p {
+    color: #444;
+    text-align: center;
+    font-family: Work Sans;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+#add_Photo {
+    display: none;
+}
+
+.file_selection {
+    width: 160px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50px;
+    background-color: #CBD6DC;
+    color: #306685;
+    text-align: center;
+    font-family: Work Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 2.5;
+
+}
+
+.photo_file_section:hover,
+#title:hover {
+    outline: darkcyan solid 1px;
+
+}
+
+.file_miniature {
+    display: none;
+    margin: auto;
+    height: 170px;
+    width: auto;
+    border: #3d3d3d solid 1px;
+}
+
+.upload_img_form #title,
+#categories {
+    display: flex;
+    font-family: "Work Sans";
+    color: #3d3d3d;
+    font-weight: 500;
+    width: 420px;
+    height: 50px;
+    margin: 7px auto 30px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09)
+}
+
+#title:focus,
+#categories:focus {
+    outline: darkcyan solid 1px;
 }

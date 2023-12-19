@@ -122,15 +122,14 @@ function ModalAdd() {
 			<button class="close_btn"><i class="fa-solid fa-xmark"></i></button>
 		</div>
     <h3>Ajout photo</h3>
-    <form class="form_upload_img">
-      <label>
-			<i class="fa-regular fa-image"></i>
-			<input type="file" name="image" id="ajoutPhoto">
-			<button id="btnChoixFichier"> +Ajouter une image</button>
-			<img src="#" alt="Aperçu de l'image selectionner" id="fichierSelectionner">
+    <form class="upload_img_form">
+      <label class="photo_file_section">
+			<img  src="./assets/icons/landscape.svg">
+			<input type="file" name="image" id="add_Photo">
+			<span class="file_selection"> + Ajouter photo</span>
+			<img src="#" alt="Aperçu de l'image" class="file_miniature">
 			<p>jpg,png : 4Mo max</p>
       </label>
-        <span class="format_picture">jpg, png: 4mo max</span>
       </label>
       <label for="title">Titre</label>
         <input type="text" id="title" name="title">
@@ -145,6 +144,8 @@ function ModalAdd() {
   // Append the modal to the body
   document.body.appendChild(modal);
   selectCategory(categories);
+  const fileInput = modal.querySelector("#add_Photo");
+  fileInput.addEventListener("change", previewImage);
 }
 
 function selectCategory(categories) {
@@ -229,27 +230,35 @@ function switchModal() {
     modal1.showModal();
   });
 }
+
 function displayModalGallery(works) {
-  const galleryModal = document.querySelector(".modal_gallery");
-  if (galleryModal !== null) {
-    galleryModal.innerHTML = works
-      .map(
-        (img) =>
-          `<div class="gallery-item">
-          <img src=${img.imageUrl} alt=${img.title} data-id=${img.id}>
-          <i class="fa-solid fa-trash-can delete-icon" data-id=${img.id}></i>
-        </div> `
-      )
-      .join("");
+  const galleryContainer = document.querySelector(".modal_gallery");
+  // Clear existing gallery content
+  galleryContainer.innerHTML = "";
 
-    let DeleteIcons = document.querySelectorAll(".delete-icon");
-    for (let DeleteIcon of DeleteIcons) {
-      DeleteIcon.addEventListener("click", deleteWork);
-    }
-  }
+  works.forEach((img) => {
+    const galleryItem = document.createElement("div");
+    galleryItem.classList.add("gallery_item");
+
+    const blackSquare = document.createElement("p");
+    blackSquare.classList.add("black_square");
+    galleryItem.appendChild(blackSquare);
+
+    const image = document.createElement("img");
+    image.src = img.imageUrl;
+    image.alt = img.title;
+    image.dataset.id = img.id;
+    galleryItem.appendChild(image);
+
+    const deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete_icon");
+    deleteIcon.dataset.id = img.id;
+    deleteIcon.addEventListener("click", deleteWork);
+    galleryItem.appendChild(deleteIcon);
+
+    galleryContainer.appendChild(galleryItem);
+  });
 }
-
-//function called when the trash icon is clicked in the modal, allowing to delete works
 
 async function deleteWork(e) {
   let id = this.dataset.id;
@@ -260,8 +269,8 @@ async function deleteWork(e) {
       Accept: "*/*",
       Authorization: "Bearer " + localStorage.user,
     },
-  }).then((res) => {
-    if (res.ok) {
+  }).then((response) => {
+    if (response.ok) {
       e.target.parentElement.remove();
       refreshWorks();
     } else {
@@ -276,71 +285,85 @@ async function deleteWork(e) {
   });
 }
 
-/* async function displayModalGallery(works) {
-  const galleryContainer = document.querySelector(".modal_gallery");
-  // Clear existing gallery content
-  galleryContainer.innerHTML = "";
+//Adding projects to the gallery with the modal
 
-  // Fetch gallery data from the API
-  const galleryData = await fetchWorks();
+// Function to preview the uploaded image
+function previewImage(event) {
+  const input = event.target;
+  const preview = document.querySelector(".file_miniature");
+  const labelSection = input.closest(".photo_file_section");
+  const maxSizeMB = 4; // Maximum allowed file size in megabytes
 
-  // Populate the gallery modal with fetched data
-  galleryData.forEach((item) => {
-    const galleryItem = document.createElement("div");
-    galleryItem.classList.add("gallery-item");
+  const file = input.files[0];
 
-    const deleteIcon = document.createElement("span");
-    deleteIcon.classList.add("delete-icon");
-    deleteIcon.innerHTML = '<i class="fas fa-trash-alt"></i>';
-    deleteIcon.addEventListener("click", () => deleteWork(item.id));
-
-    const image = document.createElement("img");
-    image.src = item.imageUrl;
-    image.alt = item.title;
-
-    galleryItem.appendChild(deleteIcon);
-    galleryItem.appendChild(image);
-
-    galleryContainer.appendChild(galleryItem);
-  });
-}
-
-async function deleteWork(workId) {
-  {
-    const token = window.localStorage.getItem("token");
-    try {
-      // Make a DELETE request to the API
-      const response = await fetch(
-        `http://localhost:5678/api/works/${workId}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      if (response.ok) {
-        console.log(`Work with ID ${workId} deleted successfully.`);
-        const galleryItem = document.querySelector(
-          `[data-work-id="${workId}"]`
-        );
-        if (galleryItem) {
-          galleryItem.remove();
-        }
-      } else {
-        console.error(`Failed to delete work with ID ${workId}.`);
-      }
-    } catch (error) {
-      console.error("Error deleting work:", error);
-    }
+  // Check if a file is selected
+  if (!file) {
+    // No file selected, hide the preview and show other elements
+    preview.style.display = "none";
+    labelSection.querySelectorAll("img, span, p").forEach((element) => {
+      element.style.display = "block";
+    });
+    return;
   }
-} */
 
-/*  let iconsDelete = document.querySelectorAll(".icon_delete");
-    for (let iconDelete of iconsDelete) {
-      iconDelete.addEventListener("click", deleteProject);
+  // Check file type (PNG, JPEG,or JPG)
+  const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+  if (!allowedTypes.includes(file.type)) {
+    alert(
+      `Ce type de document n'est pas accepté. Veuillez selectionner une image JPEG, PNG ou JPG.`
+    );
+    resetForm(input);
+    labelSection.querySelectorAll("img, span, p").forEach((element) => {
+      element.style.display = "block";
+      preview.style.display = "none";
+    });
+    return;
+  }
+
+  // Check file size
+  if (file.size > maxSizeMB * 1024 * 1024) {
+    alert("Votre fichier dépasse la taille maximale autorisée (4Mo)");
+    resetForm(input);
+
+    return;
+  }
+
+  // Toggle the visibility of other elements in the label section
+  labelSection.querySelectorAll("img, span, p").forEach((element) => {
+    element.style.display = "none";
+  });
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    // Toggle the visibility of the image preview
+    preview.style.display = "block";
+    preview.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+// Function to reset the form
+function resetForm(element) {
+  const form = element.closest("form.upload_img_form");
+  if (form) {
+    const fileInput = form.querySelector("#add_Photo");
+    if (fileInput) {
+      fileInput.value = "";
     }
-  } */
-
+    form.reset();
+    // Clear the image preview and toggle visibility
+    const preview = document.querySelector(".file_miniature");
+    const labelSection = fileInput.closest(".photo_file_section");
+    labelSection.querySelectorAll("img, span, p").forEach((element) => {
+      element.style.display = "block";
+    });
+    preview.style.display = "none";
+    preview.src = "";
+  } else {
+    console.error("Form is null or undefined");
+  }
+}
 //.......................................//
 //           Logged in Display           //
 //.......................................//
