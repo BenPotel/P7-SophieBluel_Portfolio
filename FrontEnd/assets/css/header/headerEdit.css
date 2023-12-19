@@ -1,0 +1,55 @@
+.header_edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    height: 60px;
+    gap: 10px;
+    color: white;
+    background-color: black;
+    align-items: center;
+    justify-content: center;
+}
+
+.edition {
+    display: flex;
+}
+
+.edition p {
+    font-family: "Work Sans";
+    font-weight: 400;
+    font-size: 16px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    margin: 100px 0;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    gap: 20px;
+
+}
+
+nav li {
+    padding: 0 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+a,
+nav a,
+nav a:visited {
+    text-decoration: none;
+    color: black
+}
+
+nav a:hover,
+li:hover {
+    color: #B1663C;
+}

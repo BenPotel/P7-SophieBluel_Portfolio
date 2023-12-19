@@ -1,0 +1,31 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    margin: 50px 0
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    gap: 20px;
+
+}
+
+nav li {
+    padding: 0 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+a,
+nav a,
+nav a:visited {
+    text-decoration: none;
+    color: black
+}
+
+nav a:hover,
+li:hover {
+    color: #B1663C;
+}

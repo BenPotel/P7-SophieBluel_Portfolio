@@ -431,11 +431,11 @@ function TokenCheck() {
   const token = localStorage.getItem("token");
   if (token) {
     // If token is present, activate the "edition mode" stylesheet
-    stylesheetLink.href = "./assets/edit.css";
+    stylesheetLink.href = "./assets/css/edit.css";
     Editmode();
   } else {
     // If token is not present, use the default stylesheet
-    stylesheetLink.href = "./assets/style.css";
+    stylesheetLink.href = "./assets/css/style.css";
   }
 }
 
