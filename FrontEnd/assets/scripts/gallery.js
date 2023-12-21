@@ -6,7 +6,7 @@ export function displayGallery(works) {
     const workElement = document.createElement("figure");
     const imageElement = document.createElement("img");
     imageElement.src = work.imageUrl;
-    imageElement.alt = work.alt;
+    imageElement.alt = work.title;
     const titleElement = document.createElement("h3");
     titleElement.innerHTML = work.title;
 
