@@ -48,7 +48,6 @@ export function ModalAdd(categories) {
 }
 
 function selectCategory(categories) {
-  console.log(categories);
   const categorySelect = document.getElementById("categories");
 
   categorySelect.innerHTML = `
@@ -191,7 +190,7 @@ function previewImage(event) {
     return;
   }
 
-  // Toggle the visibility of other elements in the label section if the previous criterias are met
+  // Toggle off the visibility of the other elements in the label section if the previous criterias are met
   labelSection.querySelectorAll("img, span, p").forEach((element) => {
     element.style.display = "none";
   });
@@ -224,7 +223,9 @@ async function deleteWork(e) {
       if (response.status === 401) {
         console.error("Unauthorized. Check the validity of your token.");
       } else {
-        console.error(`Failed to delete work with ID ${id}. Status: ${response.status}`);
+        console.error(
+          `Failed to delete work with ID ${id}. Status: ${response.status}`
+        );
       }
     }
   });

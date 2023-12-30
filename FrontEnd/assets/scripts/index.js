@@ -38,12 +38,10 @@ switchModal();
 closeModal();
 displayModalGallery(works);
 
-//Adding projects to the gallery with the modal
-
 checkForm();
 
 //.......................................//
-//           Logged in Display           //
+//           Logged-in Display           //
 //.......................................//
 
 // Call the function when the page loads
